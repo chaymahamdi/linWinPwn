@@ -9,7 +9,7 @@ BLUE='\033[1;34m'
 NC='\033[0m'
 
 scripts_dir="/home/chaymahamdi/AgentProject/lwp-scripts"
-venv_dir="/home/chaymahamdi/AgentProject/venv"
+venv_dir="/home/chaymahamdi/AgentProject/aienv"
 
 install_tools() {
     echo -e ""
