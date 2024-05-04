@@ -9,19 +9,9 @@ BLUE='\033[1;34m'
 NC='\033[0m'
 
 scripts_dir="/home/chaymahamdi/AgentProject/lwp-scripts"
-venv_dir="/home/chaymahamdi/AgentProject/lwp-env"
-
-# Create and activate the virtual environment
-create_virtualenv() {
-    echo -e "${BLUE}Creating virtual environment...${NC}"
-    python3 -m venv $venv_dir
-    source $venv_dir/bin/activate
-}
+venv_dir="/home/chaymahamdi/AgentProject/venv"
 
 install_tools() {
-    echo -e "${BLUE}Installing tools using apt...${NC}"
-    sudo apt update
-    sudo apt install python3 python3-dev python3-pip python3-venv nmap smbmap john libsasl2-dev libldap2-dev libkrb5-dev ntpdate wget zip unzip systemd-timesyncd pipx swig curl jq openssl -y
     echo -e ""
     echo -e "${BLUE}Installing Rust...${NC}"
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
@@ -52,32 +42,67 @@ install_tools() {
     pipx install --include-deps git+https://github.com/ajm4n/adPEAS --force
     pipx install git+https://github.com/oppsec/breads.git --force
     echo -e ""
-}
-
-download_scripts() {
     echo -e "${BLUE}Downloading tools and scripts using wget and unzipping...${NC}"
     sudo mkdir -p ${scripts_dir}
     sudo mkdir -p ${scripts_dir}/ldapper
     sudo mkdir -p ${scripts_dir}/Responder
     sudo chown -R $(whoami):$(whoami) ${scripts_dir}
     wget -q "https://github.com/ropnop/go-windapsearch/releases/latest/download/windapsearch-linux-amd64" -O "$scripts_dir/windapsearch"
-    # Add other wget commands here
+    wget -q "https://github.com/ropnop/kerbrute/releases/latest/download/kerbrute_linux_amd64" -O "$scripts_dir/kerbrute"
+    wget -q "https://raw.githubusercontent.com/cddmp/enum4linux-ng/master/enum4linux-ng.py" -O "$scripts_dir/enum4linux-ng.py"
+    wget -q "https://raw.githubusercontent.com/Bdenneu/CVE-2022-33679/main/CVE-2022-33679.py" -O "$scripts_dir/CVE-2022-33679.py"
+    wget -q "https://raw.githubusercontent.com/layer8secure/SilentHound/main/silenthound.py" -O "$scripts_dir/silenthound.py"
+    wget -q "https://raw.githubusercontent.com/ShutdownRepo/targetedKerberoast/main/targetedKerberoast.py" -O "$scripts_dir/targetedKerberoast.py"
+    wget -q "https://raw.githubusercontent.com/p0dalirius/FindUncommonShares/main/FindUncommonShares.py" -O "$scripts_dir/FindUncommonShares.py"
+    wget -q "https://raw.githubusercontent.com/p0dalirius/ExtractBitlockerKeys/main/ExtractBitlockerKeys.py" -O "$scripts_dir/ExtractBitlockerKeys.py"
+    wget -q "https://raw.githubusercontent.com/p0dalirius/ldapconsole/master/ldapconsole.py" -O "$scripts_dir/ldapconsole.py"
+    wget -q "https://raw.githubusercontent.com/p0dalirius/LDAPmonitor/master/python/pyLDAPmonitor.py" -O "$scripts_dir/pyLDAPmonitor.py"
+    wget -q "https://raw.githubusercontent.com/p0dalirius/LDAPWordlistHarvester/main/LDAPWordlistHarvester.py" -O "$scripts_dir/LDAPWordlistHarvester.py"
+    wget -q "https://github.com/garrettfoster13/aced/archive/refs/heads/main.zip" -O "$scripts_dir/aced.zip"
+    wget -q "https://github.com/garrettfoster13/sccmhunter/archive/refs/heads/main.zip" -O "$scripts_dir/sccmhunter.zip"
+    wget -q "https://raw.githubusercontent.com/shellster/LDAPPER/master/ldapper.py" -O "$scripts_dir/ldapper/ldapper.py"
+    wget -q "https://raw.githubusercontent.com/shellster/LDAPPER/master/utilities.py" -O "$scripts_dir/ldapper/utilities.py"
+    wget -q "https://raw.githubusercontent.com/shellster/LDAPPER/master/queries.py" -O "$scripts_dir/ldapper/queries.py"
+    wget -q "https://raw.githubusercontent.com/shellster/LDAPPER/master/ldap_connector.py" -O "$scripts_dir/ldapper/ldap_connector.py"
+    wget -q "https://github.com/trustedsec/orpheus/archive/refs/heads/main.zip" -O "$scripts_dir/orpheus.zip"
+    wget -q "https://github.com/lkarlslund/Adalanche/releases/latest/download/adalanche-linux-x64-v2024.1.11" -O "$scripts_dir/adalanche"
+    wget -q "https://github.com/Hackndo/pyGPOAbuse/archive/refs/heads/master.zip" -O "$scripts_dir/pyGPOAbuse.zip"
+    wget -q "https://raw.githubusercontent.com/X-C3LL/GPOwned/main/GPOwned.py" -O "$scripts_dir/GPOwned.py"
+    wget -q "https://raw.githubusercontent.com/dirkjanm/PrivExchange/master/privexchange.py" -O "$scripts_dir/privexchange.py"
+    wget -q "https://raw.githubusercontent.com/lgandx/Responder/master/tools/RunFinger.py" -O "$scripts_dir/Responder/RunFinger.py"
+    wget -q "https://raw.githubusercontent.com/lgandx/Responder/master/tools/odict.py" -O "$scripts_dir/Responder/odict.py"
+    wget -q "https://raw.githubusercontent.com/lgandx/Responder/master/tools/RunFingerPackets.py"  -O "$scripts_dir/Responder/RunFingerPackets.py"
+    unzip -o "$scripts_dir/aced.zip" -d "$scripts_dir"
+    unzip -o "$scripts_dir/sccmhunter.zip" -d "$scripts_dir"
+    unzip -o "$scripts_dir/orpheus.zip" -d "$scripts_dir"
+    unzip -o "$scripts_dir/pyGPOAbuse.zip" -d "$scripts_dir"
+    chmod +x "$scripts_dir/aced-main/aced.py"
+    chmod +x "$scripts_dir/sccmhunter-main/sccmhunter.py"
+    chmod +x "$scripts_dir/windapsearch"
+    chmod +x "$scripts_dir/kerbrute"
+    chmod +x "$scripts_dir/enum4linux-ng.py"
+    chmod +x "$scripts_dir/CVE-2022-33679.py"
+    chmod +x "$scripts_dir/silenthound.py"
+    chmod +x "$scripts_dir/targetedKerberoast.py"
+    chmod +x "$scripts_dir/FindUncommonShares.py"
+    chmod +x "$scripts_dir/ExtractBitlockerKeys.py"
+    chmod +x "$scripts_dir/ldapconsole.py"
+    chmod +x "$scripts_dir/pyLDAPmonitor.py"
+    chmod +x "$scripts_dir/LDAPWordlistHarvester.py"
+    chmod +x "$scripts_dir/ldapper/ldapper.py"
+    chmod +x "$scripts_dir/orpheus-main/orpheus.py"
+    chmod +x "$scripts_dir/orpheus-main/GetUserSPNs.py"
+    chmod +x "$scripts_dir/adalanche"
+    chmod +x "$scripts_dir/pyGPOAbuse-master/pygpoabuse.py"
+    chmod +x "$scripts_dir/GPOwned.py"
+    chmod +x "$scripts_dir/privexchange.py"
+    chmod +x "$scripts_dir/Responder/RunFinger.py"
 }
-
-# Create virtual environment
-create_virtualenv
-
-# Activate virtual environment
+sudo apt update
+sudo apt install python3 python3-dev python3-pip python3-venv nmap smbmap john libsasl2-dev libldap2-dev libkrb5-dev ntpdate wget zip unzip systemd-timesyncd pipx swig curl jq openssl -y
+python3 -m venv $venv_dir
 source $venv_dir/bin/activate
-
-# Install tools and packages
 install_tools || { echo -e "\n${RED}[Failure]${NC} Installing tools failed.. exiting script!\n"; exit 1; }
-
-# Download scripts
-download_scripts
-
-# Deactivate virtual environment
-deactivate
 
 echo -e "\n${GREEN}[Success]${NC} Setup completed successfully! Reloading the shell's configuration ... \n"
 exec zsh
