@@ -8,7 +8,7 @@ GREEN='\033[1;32m'
 BLUE='\033[1;34m'
 NC='\033[0m'
 
-scripts_dir="/opt/lwp-scripts"
+scripts_dir="/home/chaymahamdi/AgentProject/lwp-scripts"
 
 install_tools() {
     echo -e "${BLUE}Installing tools using apt...${NC}"
