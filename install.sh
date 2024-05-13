@@ -100,6 +100,7 @@ install_tools() {
 }
 sudo apt update
 sudo apt install python3 python3-dev python3-pip python3-venv nmap smbmap john libsasl2-dev libldap2-dev libkrb5-dev ntpdate wget zip unzip systemd-timesyncd pipx swig curl jq openssl -y
+sudo apt-get install smbclient
 python3 -m venv $venv_dir
 source $venv_dir/bin/activate
 install_tools || { echo -e "\n${RED}[Failure]${NC} Installing tools failed.. exiting script!\n"; exit 1; }
