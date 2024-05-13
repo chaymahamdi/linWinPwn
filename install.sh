@@ -19,6 +19,7 @@ install_tools() {
     echo -e ""
     echo -e "${BLUE}Installing python tools using pip and pipx...${NC}"
     pip3 install --user pipx PyYAML alive-progress xlsxwriter sectools typer --upgrade
+    pip install impacket
     pipx ensurepath
     pipx install git+https://github.com/dirkjanm/ldapdomaindump.git --force
     pipx install git+https://github.com/Pennyw0rth/NetExec.git --force
